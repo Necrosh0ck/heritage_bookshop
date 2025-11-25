@@ -1,0 +1,20 @@
+{
+  "transactionId": "B987654",
+  "source": "Blue App",
+  "customerName": "Ben Blue",
+  "deliveryAddress": "1 St. Barangay 123, Manila",
+  "customerAge": 29,
+  "customerGender": null,
+  "customerContact": "+639999999989",
+  "items": [
+    {
+      "itemId": " B987654-001",
+      "name": "The Chronicles of Narnia: The Lion, The Witch and the Wardrobe",
+      "price": 1499,
+      "quantity": 1
+    }
+  ],
+  "totalAmount": 1499,
+  "paymentType": "Cash",
+  "transactionDate": "2025-09-20T10:20:00"
+}

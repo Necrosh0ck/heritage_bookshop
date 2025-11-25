@@ -1,0 +1,20 @@
+{
+  "transactionId": "Orange-001",
+  "source": "Orange App",
+  "customerName": "Bobby Ong",
+  "deliveryAddress": "#5 Road, Bambang, Pasig City",
+  "customerAge": 21,
+  "customerGender": "M",
+  "customerContact": "+639177777787",
+  "items": [
+    {
+      "itemId": "Orange-001-001",
+      "name": "Harry Potter and the Chamber of Secrets",
+      "price": 998,
+      "quantity": 1
+    }
+  ],
+  "totalAmount": 998,
+  "paymentType": "Credit Card",
+  "transactionDate": "2025-09-29T10:15:00"
+}

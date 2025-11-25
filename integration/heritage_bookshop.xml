@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+        http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+
+	<!-- HTTP Listener Config -->
+	<http:listener-config name="HTTP_Listener_config"
+		doc:name="HTTP Listener config"
+		doc:id="337d692f-1e26-4d38-a698-514f21b7e202">
+		<http:listener-connection host="0.0.0.0"
+			port="8081" />
+	</http:listener-config>
+
+	<!-- Database Config -->
+	<db:config name="Database_Config" doc:name="Database Config"
+		doc:id="55a27575-ef2f-4185-a12c-668ac3531bf3">
+		<db:generic-connection
+			url="jdbc:postgresql://localhost:5432/heritage_bookshop_prd"
+			driverClassName="org.postgresql.Driver" user="hb_user"
+			password="hbtest123" />
+	</db:config>
+
+	<!-- POST Sales Flow -->
+	<flow name="post-hb-sales"
+		doc:id="452a0b32-b3ff-4ba4-bb35-3b6a294029af">
+
+		<http:listener doc:name="Listener"
+			doc:id="b7722cdf-1066-4671-af7a-2db7ca6b238e"
+			config-ref="HTTP_Listener_config" path="/sales"
+			outputMimeType="application/json" allowedMethods="POST" />
+
+		<ee:transform doc:name="Normalize Payload"
+			doc:id="eed9306d-76ea-4e07-9af7-b701122e72ca">
+			<ee:message>
+				<ee:set-payload><![CDATA[
+                    %dw 2.0
+                    output application/json
+                    var source = if (payload.transactionId != null) "Orange App" else "Blue App"
+                    var customerInfo = if (source == "Orange App") payload.customer_information else {
+                        name: payload.fullName,
+                        address: payload.deliveryLoc,
+                        age: (payload.age as Number) default null,
+                        gender: payload.gender default null,
+                        phone: payload.contact
+                    }
+                    var items = if (source == "Orange App") payload.line_items map (item) -> {
+                        itemId: item.lineId,
+                        name: item.product,
+                        price: item.unitPrice,
+                        quantity: item.quantity
+                    } else payload.products map (item) -> {
+                        itemId: item.id,
+                        name: item.name,
+                        price: item.price,
+                        quantity: item.qty
+                    }
+                    ---
+                    {
+                        transactionId: (payload.transactionId default payload.salesId),
+                        source: source,
+                        customerName: customerInfo.name,
+                        deliveryAddress: customerInfo.address,
+                        customerContact: customerInfo.phone,
+                        customerAge: customerInfo.age,
+                        customerGender: customerInfo.gender,
+                        totalAmount: (payload.total default payload.amountDue),
+                        paymentType: (payload.mop default payload.paymentType),
+                        transactionDate: (payload.timestamp default payload.creationDate) as DateTime as String {format: "yyyy-MM-dd HH:mm:ss"},
+                        items: items
+                    }
+                ]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+
+		<set-variable value="#[payload]"
+			doc:name="Set Normalized Sales"
+			doc:id="f149bb41-4c6d-4636-bbe5-99fc2df0b725"
+			variableName="normalizedSales" />
+
+		<db:insert doc:name="Insert Sales Record"
+			doc:id="193754f0-16ea-4b8e-87d0-4eeb9750478c"
+			config-ref="Database_Config">
+			<db:sql><![CDATA[
+                INSERT INTO sales_transactions.sales
+                (transaction_id, source, customer_name, delivery_address, customer_contact, customer_age, customer_gender, total_amount, payment_type, transaction_date)
+                VALUES
+                (:transactionId, :source, :customerName, :deliveryAddress, :customerContact, :customerAge, :customerGender, :totalAmount, :paymentType, :transactionDate)
+            ]]></db:sql>
+			<db:input-parameters><![CDATA[
+                #[{
+                    transactionId: payload.transactionId,
+                    source: payload.source,
+                    customerName: payload.customerName,
+                    deliveryAddress: payload.deliveryAddress,
+                    customerContact: payload.customerContact,
+                    customerAge: payload.customerAge,
+                    customerGender: payload.customerGender,
+                    totalAmount: payload.totalAmount,
+                    paymentType: payload.paymentType,
+                    transactionDate: payload.transactionDate
+                }]
+            ]]></db:input-parameters>
+		</db:insert>
+
+		<foreach doc:name="For Each Item"
+			doc:id="c2bf999e-a0e3-4cae-87c6-e9fe5a3098ad"
+			collection="#[vars.normalizedSales.items]">
+			<db:insert doc:name="Insert Sales Item"
+				doc:id="ef8a21b0-64b2-4c80-88cb-028b9f7dcd86"
+				config-ref="Database_Config">
+				<db:sql><![CDATA[
+                    INSERT INTO sales_transactions.sales_items
+                    (item_id, transaction_id, product_name, price, quantity)
+                    VALUES
+                    (:itemId, :transactionId, :product_name, :price, :quantity)
+                ]]></db:sql>
+				<db:input-parameters><![CDATA[
+                    #[{
+                        itemId: payload.itemId,
+                        transactionId: vars.normalizedSales.transactionId,
+                        product_name: payload.name,
+                        price: payload.price,
+                        quantity: payload.quantity
+                    }]
+                ]]></db:input-parameters>
+			</db:insert>
+		</foreach>
+
+		<ee:transform doc:name="Send Success Response"
+			doc:id="e11ce640-de6e-4ce4-95e2-84a140607727">
+			<ee:message>
+				<ee:set-payload><![CDATA[
+                    %dw 2.0
+                    output application/json
+                    ---
+                    {
+                        "status": "Success",
+                        "message": "Record created successfully.",
+                        "transactionId": vars.normalizedSales.transactionId,
+                        "timestamp": now()
+                    }
+                ]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+
+	</flow>
+	<flow name="get-hb-sales" doc:id="2e241a04-f1be-4b9a-b03e-d8d7f62fe3ea">
+    
+    <http:listener 
+        doc:name="Listener" 
+        config-ref="HTTP_Listener_config" 
+        path="/sales" 
+        outputMimeType="application/json"
+        allowedMethods="GET"/>
+
+    <!-- 1) Extract transactionId -->
+    <set-variable 
+        variableName="transactionId"
+        value="#[attributes.queryParams.transactionId]"
+        doc:name="Set transactionId"/>
+
+    <!-- 2) First SELECT – Sales header -->
+    <db:select 
+        doc:name="Select Sales"
+        config-ref="Database_Config">
+        <db:sql><![CDATA[
+            SELECT 
+                transaction_id, 
+                source, 
+                customer_name, 
+                delivery_address, 
+                customer_contact, 
+                customer_age, 
+                customer_gender, 
+                total_amount, 
+                payment_type, 
+                transaction_date
+            FROM sales_transactions.sales
+            WHERE transaction_id = :transactionId;
+        ]]></db:sql>
+        <db:input-parameters><![CDATA[
+            #[{
+                transactionId: vars.transactionId
+            }]
+        ]]></db:input-parameters>
+    </db:select>
+
+    <set-variable 
+        variableName="salesHeader"
+        value="#[payload[0]]"
+        doc:name="Set Sales Header"/>
+
+    <!-- 3) Second SELECT – Sales items -->
+    <db:select 
+        doc:name="Select Sales Items"
+        config-ref="Database_Config">
+        <db:sql><![CDATA[
+            SELECT 
+                item_id,
+                product_name,
+                price,
+                quantity
+            FROM sales_transactions.sales_items
+            WHERE transaction_id = :transactionId;
+        ]]></db:sql>
+        <db:input-parameters><![CDATA[
+            #[{
+                transactionId: vars.transactionId
+            }]
+        ]]></db:input-parameters>
+    </db:select>
+
+    <set-variable 
+        variableName="salesItems"
+        value="#[payload]"
+        doc:name="Set Sales Items"/>
+
+    <!-- 4) Final DW Transform – Combine Header + Items -->
+    <ee:transform doc:name="Build Response">
+        <ee:message>
+            <ee:set-payload><![CDATA[
+                %dw 2.0
+                output application/json
+
+                var h = vars.salesHeader
+                var items = vars.salesItems map (i) -> {
+                    itemId: i.item_id,
+                    name: i.product_name,
+                    price: i.price,
+                    quantity: i.quantity
+                }
+
+                ---
+                {
+                    transactionId: h.transaction_id,
+                    source: h.source,
+                    customerName: h.customer_name,
+                    deliveryAddress: h.delivery_address,
+                    customerAge: h.customer_age,
+                    customerGender: h.customer_gender,
+                    customerContact: h.customer_contact,
+                    items: items,
+                    totalAmount: h.total_amount,
+                    paymentType: h.payment_type,
+                    transactionDate: h.transaction_date
+                }
+            ]]></ee:set-payload>
+        </ee:message>
+    </ee:transform>
+
+</flow>
+	
+
+</mule>
