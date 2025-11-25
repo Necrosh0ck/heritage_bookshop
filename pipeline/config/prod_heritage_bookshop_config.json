@@ -1,0 +1,24 @@
+[
+  {
+    "source_schema": "sales_transactions",
+    "source_table": "sales",
+    "fields": "*",
+    "load_type": "full",
+    "delta_column": "modified_timestamp",
+    "target_database": "stg_heritage_bookshop_prd",
+    "target_schema": "sales_transactions",
+    "target_table": "sales",
+    "batch_size": 10000
+  },
+  {
+    "source_schema": "sales_transactions",
+    "source_table": "sales_items",
+    "fields": "*",
+    "load_type": "full",
+    "delta_column": "modified_timestamp",
+    "target_database": "stg_heritage_bookshop_prd",
+    "target_schema": "sales_transactions",
+    "target_table": "sales_items",
+    "batch_size": 10000
+  }
+]

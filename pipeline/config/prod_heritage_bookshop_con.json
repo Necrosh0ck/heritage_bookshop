@@ -1,0 +1,20 @@
+{
+  "source": {
+    "host": "jdbc:postgresql://localhost:5432/heritage_bookshop_prd",
+    "user": "hb_user",
+    "password": "hbtest123",
+    "driver": "org.postgresql.Driver"
+  },
+  "target": {
+    "host": "jdbc:postgresql://localhost:5432/stg_heritage_bookshop_prd",
+    "user": "hb_user",
+    "password": "hbtest123",
+    "driver": "org.postgresql.Driver"
+  },
+  "datamart": {
+    "host": "jdbc:postgresql://localhost:5432/bi_heritage_bookshop_prd",
+    "user": "hb_user",
+    "password": "hbtest123",
+    "driver": "org.postgresql.Driver"
+  }
+}

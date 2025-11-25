@@ -1,0 +1,7 @@
+[
+    "dm_sales.sales_full",
+    "dm_sales.top_selling_products",
+    "dm_sales.sales_by_source",
+    "dm_sales.customer_demographics",
+    "dm_sales.sales_trend"
+]
