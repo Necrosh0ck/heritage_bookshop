@@ -1,0 +1,76 @@
+INFO: Starting ingest: sales_transactions.sales -> sales_transactions.sales | Load: full | Batch: 10000
+INFO: Source count for sales_transactions.sales: 2
+INFO: Target count for sales_transactions.sales: 2
+INFO: Rows ingested: 2
+INFO: Finished ingesting sales_transactions.sales
+INFO: Starting ingest: sales_transactions.sales_items -> sales_transactions.sales_items | Load: full | Batch: 10000
+INFO: Source count for sales_transactions.sales_items: 2
+INFO: Target count for sales_transactions.sales_items: 2
+INFO: Rows ingested: 2
+INFO: Finished ingesting sales_transactions.sales_items
+INFO: Spark session stopped.
+2025-11-24 19:58:47 INFO: Creating/Overwriting datamart table: dm_sales.top_selling_products
+2025-11-24 19:58:49 INFO: Finished writing dm_sales.top_selling_products | Rows: 2
+2025-11-24 19:58:49 INFO: Creating/Overwriting datamart table: dm_sales.sales_by_source
+2025-11-24 19:58:50 INFO: Finished writing dm_sales.sales_by_source | Rows: 2
+2025-11-24 19:58:50 INFO: Creating/Overwriting datamart table: dm_sales.customer_demographics
+2025-11-24 19:58:50 INFO: Finished writing dm_sales.customer_demographics | Rows: 2
+2025-11-24 19:58:50 INFO: Creating/Overwriting datamart table: dm_sales.sales_trend
+2025-11-24 19:58:50 INFO: Finished writing dm_sales.sales_trend | Rows: 1
+2025-11-24 21:49:33 INFO: Creating/Overwriting datamart table: dm_sales.top_selling_products
+2025-11-24 21:49:35 INFO: Finished writing dm_sales.top_selling_products | Rows: 2
+2025-11-24 21:49:35 INFO: Creating/Overwriting datamart table: dm_sales.sales_by_source
+2025-11-24 21:49:35 INFO: Finished writing dm_sales.sales_by_source | Rows: 2
+2025-11-24 21:49:35 INFO: Creating/Overwriting datamart table: dm_sales.customer_demographics
+2025-11-24 21:49:36 INFO: Finished writing dm_sales.customer_demographics | Rows: 2
+2025-11-24 21:49:36 INFO: Creating/Overwriting datamart table: dm_sales.sales_trend
+2025-11-24 21:49:36 INFO: Finished writing dm_sales.sales_trend | Rows: 1
+2025-11-24 21:50:34 INFO: Creating/Overwriting datamart table: dm_sales.top_selling_products
+2025-11-24 21:50:37 INFO: Finished writing dm_sales.top_selling_products | Rows: 2
+2025-11-24 21:50:37 INFO: Creating/Overwriting datamart table: dm_sales.sales_by_source
+2025-11-24 21:50:37 INFO: Finished writing dm_sales.sales_by_source | Rows: 2
+2025-11-24 21:50:37 INFO: Creating/Overwriting datamart table: dm_sales.customer_demographics
+2025-11-24 21:50:37 INFO: Finished writing dm_sales.customer_demographics | Rows: 2
+2025-11-24 21:50:37 INFO: Creating/Overwriting datamart table: dm_sales.sales_trend
+2025-11-24 21:50:38 INFO: Finished writing dm_sales.sales_trend | Rows: 1
+2025-11-24 22:01:05 INFO: Creating/Overwriting datamart table: dm_sales.top_selling_products
+2025-11-24 22:01:07 INFO: Finished writing dm_sales.top_selling_products | Rows: 2
+2025-11-24 22:01:07 INFO: Creating/Overwriting datamart table: dm_sales.sales_by_source
+2025-11-24 22:01:08 INFO: Finished writing dm_sales.sales_by_source | Rows: 2
+2025-11-24 22:01:08 INFO: Creating/Overwriting datamart table: dm_sales.customer_demographics
+2025-11-24 22:01:08 INFO: Finished writing dm_sales.customer_demographics | Rows: 2
+2025-11-24 22:01:08 INFO: Creating/Overwriting datamart table: dm_sales.sales_trend
+2025-11-24 22:01:08 INFO: Finished writing dm_sales.sales_trend | Rows: 1
+2025-11-24 22:01:08 INFO: Creating/Overwriting datamart table: dm_sales.sales_full
+2025-11-24 22:01:09 INFO: Finished writing dm_sales.sales_full | Rows: 2
+2025-11-24 22:03:45 INFO: Creating/Overwriting datamart table: dm_sales.top_selling_products
+2025-11-24 22:03:47 INFO: Finished writing dm_sales.top_selling_products | Rows: 2
+2025-11-24 22:03:47 INFO: Creating/Overwriting datamart table: dm_sales.sales_by_source
+2025-11-24 22:03:47 INFO: Finished writing dm_sales.sales_by_source | Rows: 2
+2025-11-24 22:03:47 INFO: Creating/Overwriting datamart table: dm_sales.customer_demographics
+2025-11-24 22:03:48 INFO: Finished writing dm_sales.customer_demographics | Rows: 2
+2025-11-24 22:03:48 INFO: Creating/Overwriting datamart table: dm_sales.sales_trend
+2025-11-24 22:03:48 INFO: Finished writing dm_sales.sales_trend | Rows: 1
+2025-11-24 22:03:48 INFO: Creating/Overwriting datamart table: dm_sales.sales_full
+2025-11-24 22:03:48 INFO: Finished writing dm_sales.sales_full | Rows: 2
+2025-11-24 22:08:33 INFO: Creating/Overwriting datamart table: dm_sales.top_selling_products
+2025-11-24 22:08:35 INFO: Finished writing dm_sales.top_selling_products | Rows: 2
+2025-11-24 22:08:35 INFO: Creating/Overwriting datamart table: dm_sales.sales_by_source
+2025-11-24 22:08:35 INFO: Finished writing dm_sales.sales_by_source | Rows: 2
+2025-11-24 22:08:35 INFO: Creating/Overwriting datamart table: dm_sales.customer_demographics
+2025-11-24 22:08:36 INFO: Finished writing dm_sales.customer_demographics | Rows: 2
+2025-11-24 22:08:36 INFO: Creating/Overwriting datamart table: dm_sales.sales_trend
+2025-11-24 22:08:36 INFO: Finished writing dm_sales.sales_trend | Rows: 1
+2025-11-24 22:08:36 INFO: Creating/Overwriting datamart table: dm_sales.sales_full
+2025-11-24 22:08:36 INFO: Finished writing dm_sales.sales_full | Rows: 2
+2025-11-24 22:20:21 INFO: Exporting table dm_sales.sales_full to /Users/josh/Desktop/heritage_bookshop/pipeline/exported_files/dm_sales_sales_full_20251124_222021
+2025-11-24 22:20:23 INFO: Finished exporting dm_sales.sales_full | Rows: 2
+2025-11-24 22:20:23 INFO: Exporting table dm_sales.top_selling_products to /Users/josh/Desktop/heritage_bookshop/pipeline/exported_files/dm_sales_top_selling_products_20251124_222023
+2025-11-24 22:20:23 INFO: Finished exporting dm_sales.top_selling_products | Rows: 2
+2025-11-24 22:20:23 INFO: Exporting table dm_sales.sales_by_source to /Users/josh/Desktop/heritage_bookshop/pipeline/exported_files/dm_sales_sales_by_source_20251124_222023
+2025-11-24 22:20:24 INFO: Finished exporting dm_sales.sales_by_source | Rows: 2
+2025-11-24 22:20:24 INFO: Exporting table dm_sales.customer_demographics to /Users/josh/Desktop/heritage_bookshop/pipeline/exported_files/dm_sales_customer_demographics_20251124_222024
+2025-11-24 22:20:24 INFO: Finished exporting dm_sales.customer_demographics | Rows: 2
+2025-11-24 22:20:24 INFO: Exporting table dm_sales.sales_trend to /Users/josh/Desktop/heritage_bookshop/pipeline/exported_files/dm_sales_sales_trend_20251124_222024
+2025-11-24 22:20:24 INFO: Finished exporting dm_sales.sales_trend | Rows: 1
+2025-11-24 22:20:24 INFO: Datamart export completed.
