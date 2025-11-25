@@ -1,0 +1,32 @@
+[
+  {
+    "target_table": "dm_sales.top_selling_products",
+    "sql": "SELECT si.product_name, SUM(si.quantity) AS total_sold, SUM(si.price*si.quantity) AS total_revenue FROM sales_transactions.sales_items si JOIN sales_transactions.sales s ON si.transaction_id = s.transaction_id GROUP BY si.product_name ORDER BY total_sold DESC"
+  },
+  {
+    "target_table": "dm_sales.sales_by_source",
+    "sql": "SELECT s.source, SUM(s.total_amount) AS total_sales, COUNT(s.transaction_id) AS transactions FROM sales_transactions.sales s GROUP BY s.source"
+  },
+  {
+    "target_table": "dm_sales.customer_demographics",
+    "sql": "SELECT s.customer_gender, FLOOR(s.customer_age/10)*10 AS age_group, COUNT(*) AS count_customers, SUM(s.total_amount) AS total_spent, s.customer_name, s.delivery_address, s.customer_contact FROM sales_transactions.sales s GROUP BY s.customer_gender, age_group, s.customer_name, s.delivery_address, s.customer_contact",
+    "mask_columns": {
+      "customer_name": "hash",
+      "delivery_address": "fixed",
+      "customer_contact": "partial"
+    }
+  },
+  {
+    "target_table": "dm_sales.sales_trend",
+    "sql": "SELECT DATE_TRUNC('month', s.transaction_date) AS month, SUM(s.total_amount) AS monthly_sales FROM sales_transactions.sales s GROUP BY month ORDER BY month"
+  },
+  {
+    "target_table": "dm_sales.sales_full",
+    "sql": "SELECT s.transaction_id, s.source, s.customer_name, s.delivery_address, s.customer_contact, s.customer_age, s.customer_gender, s.total_amount, s.payment_type, s.transaction_date, si.item_id, si.product_name, si.price, si.quantity FROM sales_transactions.sales s JOIN sales_transactions.sales_items si ON s.transaction_id = si.transaction_id",
+    "mask_columns": {
+      "customer_name": "hash",
+      "delivery_address": "fixed",
+      "customer_contact": "partial"
+    }
+  }
+]
